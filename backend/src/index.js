@@ -7,10 +7,12 @@ import messageRoutes from "./routes/message.route.js";
 import { connectDB } from "./lib/db.js";
 import cors from "cors";
 import { app, server } from "./lib/socket.js";
+import path from "path";
 
 dotenv.config();
 
 const PORT = process.env.PORT;
+const __dirname = path.resolve();
 
 // to be able to extract json data out of request body , use this middleware
 // Increase the limit for Json and url encoded data
@@ -24,6 +26,17 @@ app.use(cors({
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
+
+// Note: serving the API and react applications under same place
+if(process.env.NODE_ENV === "production") {
+    // use static middleware to just put our path to static assets
+    app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+    // if we visit any routes, we like to see our react app
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+    });
+}
 
 server.listen(PORT, () => {
     console.log("server is running on port: "+ PORT);

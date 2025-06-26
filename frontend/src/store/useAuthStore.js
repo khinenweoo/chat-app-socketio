@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 // return an object and this object is going to be our intial state
 // and we can get a function called set
 // we might want to have a loading state for it
-const BASE_URL = "http://localhost:5001";
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5001" : "/";
 
 export const useAuthStore = create((set, get) => ({
  authUser: null, 
