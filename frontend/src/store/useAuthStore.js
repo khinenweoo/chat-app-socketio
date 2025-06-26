@@ -12,6 +12,7 @@ export const useAuthStore = create((set) => ({
  isLoggingIn: false,
  isUpdatingProfile: false,
  isCheckingAuth: true,
+ onlineUsers: [],
 // call this function as soon as we visit our app
  checkAuth: async () => {
     try {
